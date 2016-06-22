@@ -52,6 +52,9 @@ chrome.runtime.onMessage.addListener(
 //-----------------------Websocket connect----------
 var connection;
 var response = 'None';
+//var serverUrl = 'ws://127.0.0.1:3000';//For local testing
+var serverUrl = 'wss://lit-everglades-29636.herokuapp.com/';//Live
+
 function sendMessageWebsocket(msg){
 
   // var msg1='hi from sameera';
@@ -84,9 +87,7 @@ function WebSocketConnect(){
     }
 
     // open connection
-    //connection = new WebSocket('ws://127.0.0.1:1337');
-    connection = new WebSocket('wss://lit-everglades-29636.herokuapp.com/');
-
+    connection = new WebSocket(serverUrl);
 
     connection.onopen = function () {
         // first we want users to enter their names
@@ -135,7 +136,7 @@ function WebSocketConnect(){
         if (connection.readyState !== 1) {
             console.log('Error Unable to comminucate with the WebSocket server.');
             connection.close();
-            connection = new WebSocket('ws://127.0.0.1:1337');
+            connection = new WebSocket(serverUrl);
             retried =1;
         }
 
