@@ -14,4 +14,3 @@ function count() {
 $(document).ready(function(){
     document.getElementById('do-count').onclick = count;
 });
-

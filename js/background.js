@@ -36,7 +36,7 @@ function PrintMsg(){
   console.log('Running');
   notifyMe();
 
-}
+} 
 
 
 chrome.runtime.onMessage.addListener(
