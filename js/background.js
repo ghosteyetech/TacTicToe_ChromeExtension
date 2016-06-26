@@ -54,7 +54,8 @@ function PrintMsg(){
 function receiveDataFfromFront(msg){
   console.log(msg);
   //var response = msg.rqdata + 'gotit';
-  var response = sendMessageWebsocket(msg.rqdata);
+  var reqData = JSON.stringify(msg.rqdata);
+  var response = sendMessageWebsocket(reqData);
   return {reply: response};
 }
 
@@ -80,7 +81,7 @@ function sendMessageWebsocket(msg){
 
 }
 
-function frontCall(dataRes){
+function frontCall(data){
   console.log("background:: frontCall CALLED");
   // var port;
   // if(!port){
@@ -94,9 +95,11 @@ function frontCall(dataRes){
   //   console.log(msg);
   // });
 
-  chrome.runtime.sendMessage({serverRespond: dataRes });
+  chrome.runtime.sendMessage({serverRespond: data });
 
 }
+frontCall("zzz");
+setInterval(function() { frontCall("zzz"); },5000);
 
 
 function WebSocketConnect(){
@@ -119,10 +122,8 @@ function WebSocketConnect(){
 
     connection.onopen = function () {
         // first we want users to enter their names
-        connection.send(name);
-        connection.send(msg1);
-
-
+        var welcomeData = JSON.stringify({"name": name, "data" : msg1});
+        connection.send(welcomeData);
     };
 
     connection.onerror = function (error) {
@@ -136,14 +137,27 @@ function WebSocketConnect(){
         // JSON this should work without any problem but we should make sure that
         // the massage is not chunked or otherwise damaged.
         //frontCall(message.data);
-        chrome.runtime.sendMessage({serverRespond: message.data });//Send data to frontend
+
         try {
             var json = JSON.parse(message.data);
-            console.log("Message :");
-            console.log(json);
+            console.log("Your ID :"+json.YourID);
+            console.log("opponentPlayer ID :"+json.opponentPlayer);
+            console.log("ClickedBox :"+json.Box);
+
         } catch (e) {
             console.log('This doesn\'t look like a valid JSON: ', message.data);
             return;
+        }
+
+        try {
+            var json = JSON.parse(message.data);
+            console.log("Server respond sending to front :");
+            console.log(json);
+            //chrome.runtime.sendMessage(json);//Send data to frontend
+            frontCall(json);
+        } catch (e) {
+            console.log("Unable to send respond to frontend");
+            console.log(e);
         }
 
 
@@ -179,3 +193,20 @@ function WebSocketConnect(){
 
 //ghost uncomment to start
 WebSocketConnect();//Start WebSocketConnect
+
+
+function sendPing(){
+
+  var msg=JSON.stringify({data : 'ping'});
+  console.log(msg);
+
+  if(connection.readyState === 1){
+    connection.send(msg);
+  }else{
+    console.log('===========>WebSocket error<=============');
+    console.log(connection.readyState);
+  }
+
+}
+
+var myVar = setInterval(sendPing, 3000);

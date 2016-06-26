@@ -19,7 +19,7 @@ app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webS
 
   $scope.helloText = "Test text";
   $scope.serverPushMsg = "Not received";
-  
+
   $scope.boxButtons = [
     { rowId:'row1',
            rowButtons : [ { colunmId:'11btn' ,clicked: 'false'}, {colunmId:'12btn' ,clicked: 'false'}, {colunmId:'13btn' ,clicked: 'false'}]
@@ -36,7 +36,7 @@ app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webS
   $scope.sendAction = function(ev,btnObj,data){
 
     btnObj.clicked = true;//change button color
-    var dataToServer = btnObj.colunmId;
+    var dataToServer = {"data" : btnObj.colunmId };
     //Send data to background-js via service
     console.log("Requesting....");
     var webSctData = webSocketInfoService.getWebSocketData(function(data){
