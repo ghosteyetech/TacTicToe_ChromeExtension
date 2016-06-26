@@ -36,17 +36,27 @@ function PrintMsg(){
   console.log('Running');
   notifyMe();
 
-} 
+}
 
+//===============================================
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log("Request from front End :"+request.greeting);
+// chrome.runtime.onMessage.addListener(
+//
+//   function(request, sender, sendResponse) {
+//     console.log("Request from front End :"+request.rqdata);
+//     sendResponse({reply: "OfflineServerRespose"});
+//
+//     /*var res = sendMessageWebsocket(request.rqdata);
+//     sendResponse({reply: res});*/
+//
+// });
 
-    var res = sendMessageWebsocket(request.greeting);
-    if (res == "hello")
-      sendResponse({farewell: "goodbye"});
-});
+function receiveDataFfromFront(msg){
+  console.log(msg);
+  //var response = msg.rqdata + 'gotit';
+  var response = sendMessageWebsocket(msg.rqdata);
+  return {reply: response};
+}
 
 
 //-----------------------Websocket connect----------
@@ -67,6 +77,24 @@ function sendMessageWebsocket(msg){
     console.log('===========>WebSocket error<=============');
     console.log(connection.readyState);
   }
+
+}
+
+function frontCall(dataRes){
+  console.log("background:: frontCall CALLED");
+  // var port;
+  // if(!port){
+  //   port = chrome.runtime.connect({name: "tttPort"});
+  // }
+  //
+  // port.postMessage({serverRespond: dataRes });
+  //
+  // port.onMessage.addListener(function(msg) {
+  //   console.log("Response from Front : ");
+  //   console.log(msg);
+  // });
+
+  chrome.runtime.sendMessage({serverRespond: dataRes });
 
 }
 
@@ -107,15 +135,14 @@ function WebSocketConnect(){
         // try to parse JSON message. Because we know that the server always returns
         // JSON this should work without any problem but we should make sure that
         // the massage is not chunked or otherwise damaged.
+        //frontCall(message.data);
+        chrome.runtime.sendMessage({serverRespond: message.data });//Send data to frontend
         try {
             var json = JSON.parse(message.data);
             console.log("Message :");
             console.log(json);
-
-
         } catch (e) {
             console.log('This doesn\'t look like a valid JSON: ', message.data);
-            var el = document.getElementById('server-time');
             return;
         }
 
@@ -150,5 +177,5 @@ function WebSocketConnect(){
 
 }
 
-
-WebSocketConnect();
+//ghost uncomment to start
+WebSocketConnect();//Start WebSocketConnect

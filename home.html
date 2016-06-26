@@ -1,14 +1,41 @@
-<html>
-  <!-- <script type="text/javascript" src="js/background.js"></script> -->
-  <script type="text/javascript" src='js/lib/jquery_1_9_1.min.js'></script>
-  <script type="text/javascript" src="js/frontend.js"></script>
+<html ng-csp>
+  <head>
+    <link rel="stylesheet" href="css/angular-material.min.css">
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="js/lib/angularMaterial_1_5_3/angular.min.js"></script>
+    <script src="js/lib/angularMaterial_1_5_3/angular-animate.min.js"></script>
+    <script src="js/lib/angularMaterial_1_5_3/angular-aria.min.js"></script>
+    <script src="js/lib/angularMaterial_1_5_3/angular-messages.min.js"></script>
+    <!-- Angular Material Library -->
+    <script src="js/lib/angularMaterial_1_5_3/angular-material.min.js"></script>
+
+    <script type="text/javascript" src='js/lib/jquery_1_9_1.min.js'></script>
+
+    <link rel="stylesheet" href="css/home.css">
+
+    <script type="text/javascript" src="js/frontend.js"></script>
+    <script type="text/javascript" src="js/controllers/mainController.js"></script>
+    <script type="text/javascript" src="js/background.js"></script>
+  </head>
+
+  <body ng-app="tacTicToe">
+    <div id="MainCtrl" ng-controller="MainCtrl" id="gameWindow">
+
+      <h2 id="resFromBack">Test : {{helloText}}</h2>
+
+      <section ng-repeat="btRow in boxButtons" layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <div style="display: inline-flex;">
+          <section ng-repeat="tttButton in btRow.rowButtons" layout="column" layout-align="center center" layout-wrap>
+            <md-button class="md-raised md-warn tic-button" ng-class='{"tic-button-clicked": tttButton.clicked == true}' ng-click="sendAction($event,tttButton ,'dncdjcndj')">{{tttButton.colunmId}}</md-button>
+          </section>
+        </div>
+      </section>
+
+      <p>Server Push Respond Msg:: {{serverPushMsg}}</p>
+    </div>
+    <!-- <p>Push Msg:: <span id="backendPushMsg"></span></p> -->
 
 
-  <body>
-
-    <p id='server-time'></p>
-    <p id="demo">=a</p>
-    <button type="button" id="do-count">Send Msg to WS</button>
 
   </body>
 </html>
