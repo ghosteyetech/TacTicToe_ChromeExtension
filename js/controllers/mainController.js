@@ -19,6 +19,7 @@ app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webS
 
   $scope.helloText = "Test text";
   $scope.serverPushMsg = "Not received";
+  $scope.showLoading = true;
 
   $scope.boxButtons = [
     { rowId:'row1',
@@ -48,9 +49,28 @@ app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webS
   };
 
   $scope.receiveServerRespond = function(severRes){
+    $scope.showLoading = false;
     console.log("Server response ==== ");
     console.log(severRes);
-    $scope.serverPushMsg = severRes;
+    $scope.serverPushMsg = severRes.Box;
+
+    var lenRow = $scope.boxButtons.length;
+
+    var i,j;
+    for(i=0; i< lenRow; i++){
+        var lenColumn = $scope.boxButtons[i].rowButtons.length;
+        for(j=0; j <lenColumn; j++){
+          if($scope.boxButtons[i].rowButtons[j].colunmId == severRes.Box){
+            $scope.boxButtons[i].rowButtons[j].clicked = true;
+          }else {
+            console.log("Not matched box");
+          }
+
+        }
+    }
+
+    //$scope.boxButtons[0].rowButtons[0].clicked = true;
+
     $scope.$apply();
   }
 

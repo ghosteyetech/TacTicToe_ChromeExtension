@@ -98,8 +98,8 @@ function frontCall(data){
   chrome.runtime.sendMessage({serverRespond: data });
 
 }
-frontCall("zzz");
-setInterval(function() { frontCall("zzz"); },5000);
+//frontCall("zzz");
+//setInterval(function() { frontCall("zzz"); },5000);
 
 
 function WebSocketConnect(){
