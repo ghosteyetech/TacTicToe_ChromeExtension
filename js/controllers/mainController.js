@@ -14,8 +14,42 @@ app.service('webSocketInfoService', function(){
 
 });
 
+app.service('chromeBackendInfoService',function($rootScope){
 
-app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webSocketInfoService){
+  var data;
+
+  chrome.extension.onMessage.addListener(function(message, messageSender, sendResponse) {
+  	console.log("Push Msg Received :: ");
+  	console.log(message);
+  	if(message.serverRespond != "zzz"){
+      data = message.serverRespond;
+      $rootScope.$apply();
+  	}else{
+  		console.log(message.serverRespond);
+  	}
+      // message is the message you sent, probably an object
+      // messageSender is an object that contains info about the context that sent the message
+      // sendResponse is a function to run when you have a response
+  });
+
+  this.getData = function(){
+    return data;
+  }
+
+});
+
+app.controller('MainCtrl',['$scope','webSocketInfoService','chromeBackendInfoService', function($scope,webSocketInfoService,chromeBackendInfoService){
+
+  $scope.chromeBackendservice = chromeBackendInfoService;
+  $scope.controllerDataBackend = 0;
+
+  $scope.$watch('chromeBackendservice.getData()',function(newData){
+    console.log("New Data :"+newData);
+    $scope.controllerDataBackend = newData;
+    if(newData != undefined){
+        $scope.receiveServerRespond(newData);
+    }
+  });
 
   $scope.helloText = "Test text";
   $scope.serverPushMsg = "Not received";
@@ -62,16 +96,13 @@ app.controller('MainCtrl',['$scope','webSocketInfoService', function($scope,webS
         for(j=0; j <lenColumn; j++){
           if($scope.boxButtons[i].rowButtons[j].colunmId == severRes.Box){
             $scope.boxButtons[i].rowButtons[j].clicked = true;
-          }else {
-            console.log("Not matched box");
           }
-
         }
     }
 
     //$scope.boxButtons[0].rowButtons[0].clicked = true;
 
-    $scope.$apply();
+    //$scope.$apply();
   }
 
 }]);
