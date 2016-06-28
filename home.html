@@ -10,6 +10,8 @@
     <script src="js/lib/angularMaterial_1_5_3/angular-material.min.js"></script>
 
     <script type="text/javascript" src='js/lib/jquery_1_9_1.min.js'></script>
+    <script type="text/javascript" src="js/lib/spinner/spin.js"></script>
+    <script type="text/javascript" src="js/lib/spinner/angular-spinner.min.js"></script>
 
     <link rel="stylesheet" href="css/home.css">
 
@@ -34,6 +36,26 @@
 
       <p>Service respond : {{controllerDataBackend}}</p>
 
+      <div class="MaskLayer"
+            ng-class="{isClosed : !masked}">
+
+            <div class="MaskLayer-Content">
+                <p>
+                    Waiting for response!
+                </p>
+                <span ng-show="showLoading" us-spinner></span>
+                <!-- <span ng-show="showLoading" us-spinner="{radius:30, width:8, length: 16}"></span> -->
+
+                <!-- <button ng-click="close();">
+                    Hide Mask
+                </button> -->
+            </div>
+        </div>
+
+        <!-- <p>
+            My content is masked: {{masked}}
+        </p>
+        <button ng-click="open();">Show Mask</button> -->
       <!-- <div layout="row" layout-sm="column" layout-align="space-around">
         <md-progress-circular ng-show="showLoading" md-diameter="20px" md-mode="indeterminate"></md-progress-circular>
       </div> -->

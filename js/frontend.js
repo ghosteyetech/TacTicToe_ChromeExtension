@@ -14,4 +14,4 @@
     // sendResponse is a function to run when you have a response
 });
 */
-var app = angular.module('tacTicToe',['ngMaterial']);
+var app = angular.module('tacTicToe',['ngMaterial','angularSpinner']);

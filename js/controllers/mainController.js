@@ -40,6 +40,19 @@ app.service('chromeBackendInfoService',function($rootScope){
 
 app.controller('MainCtrl',['$scope','webSocketInfoService','chromeBackendInfoService', function($scope,webSocketInfoService,chromeBackendInfoService){
 
+  //============MAsk
+  $scope.showLoading = true;
+  $scope.masked = false;
+
+  $scope.close = function () {
+      $scope.masked = false;
+  };
+
+  $scope.open = function () {
+      $scope.masked = true;
+  };
+  //============mask
+
   $scope.chromeBackendservice = chromeBackendInfoService;
   $scope.controllerDataBackend = 0;
 
@@ -53,7 +66,7 @@ app.controller('MainCtrl',['$scope','webSocketInfoService','chromeBackendInfoSer
 
   $scope.helloText = "Test text";
   $scope.serverPushMsg = "Not received";
-  $scope.showLoading = true;
+
 
   $scope.boxButtons = [
     { rowId:'row1',
@@ -70,6 +83,8 @@ app.controller('MainCtrl',['$scope','webSocketInfoService','chromeBackendInfoSer
 
   $scope.sendAction = function(ev,btnObj,data){
 
+    $scope.masked = true;
+
     btnObj.clicked = true;//change button color
     var dataToServer = {"data" : btnObj.colunmId };
     //Send data to background-js via service
@@ -83,7 +98,8 @@ app.controller('MainCtrl',['$scope','webSocketInfoService','chromeBackendInfoSer
   };
 
   $scope.receiveServerRespond = function(severRes){
-    $scope.showLoading = false;
+    //$scope.showLoading = false;
+    $scope.masked = false;
     console.log("Server response ==== ");
     console.log(severRes);
     $scope.serverPushMsg = severRes.Box;
